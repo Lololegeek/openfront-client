@@ -1,0 +1,30 @@
+{
+  "name": "openfront-app",
+  "version": "1.0.0",
+  "description": "Une application desktop pour jouer à OpenFront.io",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "author": "Loévan",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.2.3",
+    "electron-builder": "^24.15.1"
+  },
+  "build": {
+    "appId": "com.openfront.app",
+    "productName": "OpenFront",
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*"
+    ]
+  }
+}
