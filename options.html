@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Options - OpenFront</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    label, select, input {
+      display: block;
+      margin-bottom: 10px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Options de lancement</h2>
+
+  <label for="resolution">Résolution :</label>
+  <select id="resolution">
+    <option value="1920x1080">1920 x 1080</option>
+    <option value="1600x900">1600 x 900</option>
+    <option value="1280x720">1280 x 720</option>
+  </select>
+
+  <label>
+    <input type="checkbox" id="fullscreen" />
+    Plein écran
+  </label>
+
+  <label>
+    <input type="checkbox" id="blocker" />
+    Bloqueur de pubs
+  </label>
+
+  <button onclick="launchGame()">Lancer le jeu</button>
+  <button onclick="reloadGame()">Relancer le jeu</button>
+
+  <script>
+    const fs = require('fs');
+    const path = require('path');
+    const { remote } = require('electron');
+    const settingsPath = path.join(remote.app.getPath('userData'), 'settings.json');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (fs.existsSync(settingsPath)) {
+        const saved = JSON.parse(fs.readFileSync(settingsPath));
+        document.getElementById('resolution').value = `${saved.width}x${saved.height}`;
+        document.getElementById('fullscreen').checked = saved.fullscreen;
+        document.getElementById('blocker').checked = saved.blocker;
+      }
+    });
+
+    function launchGame() {
+      const res = document.getElementById('resolution').value.split('x');
+      const width = parseInt(res[0]);
+      const height = parseInt(res[1]);
+      const fullscreen = document.getElementById('fullscreen').checked;
+      const blocker = document.getElementById('blocker').checked;
+
+      window.api.launchGame({ width, height, fullscreen, blocker });
+    }
+
+    function reloadGame() {
+      window.api.reloadGame();
+    }
+  </script>
+</body>
+</html>
